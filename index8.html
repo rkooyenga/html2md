@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to Markdown Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+/* light */
+        :root {
+            --bg-color: #f8f8f8; /* Light background */
+            --panel-bg: rgba(255, 255, 255, 0.8); /* Glassmorphic panel background */
+            --text-color: rgb(27, 27, 27); /* Dark text */
+            --accent-color: #3498db; /* Blue accent */
+            --shadow-color: rgba(0, 0, 0, 0.15);
+            --glass-blur: 5px; /* Adjust blur amount */
+        }
+/* dark theme */
+      :root {
+            --bg-color: #1e1e1e; /* Dark background */
+            --panel-bg: rgba(30, 30, 30, 0.8); /* Glassmorphic panel background */
+            --text-color: #eee; /* Light text */
+            --accent-color: #66fcf1; /* Teal accent */
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --glass-blur: 10px; /* Adjust blur amount */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 55px; /* Large title */
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px; /* Increased perspective */
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border-radius: 15px;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            overflow: hidden;
+            width: 800px;
+            max-width: 95%;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.8s ease, opacity 0.5s ease; /* Smooth transitions */
+            transform-style: preserve-3d; /* Important for 3D rotation */
+        }
+
+        .panel.flipped {
+            transform: rotateY(180deg);
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            border: none;
+            resize: vertical;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            padding: 1rem;
+            box-sizing: border-box;
+            overflow: auto;
+            background: transparent;
+            color: var(--text-color);
+            outline: none;
+            backface-visibility: hidden; /* Hide back of textarea during flip */
+        }
+
+        .copy-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .copy-icon:hover {
+            opacity: 1;
+        }
+
+        footer {
+            padding: 1.5rem 0;
+            text-align: center;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>HTML to Markdown Converter</h1>
+    </header>
+
+    <main>
+        <div class="panel">
+            <textarea id="input" placeholder="Paste HTML or Markdown here..."></textarea>
+            <span class="copy-icon" onclick="copyToClipboard()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M9 8h6m-3 0a3 3 0 11-6 0 3 3 0 016 0m2 5.333A2 2 0 0112 15a2 2 0 01-2-2.333m0-6.666a2 2 0 012-2.333m0 6.666a2 2 0 01-2 2.333m0-6.666L9 9.333m9.923 0h-9.846m9.847 0a3.45 3.45 0 00-1.798 3.168c.02.048.04.097.06.145a3.913 3.913 0 01.424.949c.067.253.155.5.262.732a3.977 3.977 0 01.696.806c.12.113.254.215.397.307a3.112 3.112 0 01.385.25c.045.032.089.065.133.097m9.923 0l-1.798-3.168a2 2 0 00-2.41 0l-1.798 3.168m1.798 0l2.058 3.639c.675.451 1.455.867 2.302 1.22m-2.302-1.22l-.397-.307m0-4.058a2 2 0 01-.43-.59m0 0A3.422 3.422 0 0118 19.333m0 0A2 2 0 0118.43 14.743m0 0c.458.074.9.15.932.564m0 0c.033.414-.268.807-.932.564m0 0l-.397.307m0 0l-2.058-3.639m-2.125.451A2 2 0 0110 9.333m0 0a2 2 0 01-.43-.59m0 0c-.032-.414.268-.807.932-.564m0 0l.397.307m0 0l2.058 3.639m0 0l-2.058-3.639" />
+</svg></span>
+        </div>
+    </main>
+
+    <footer>
+        <p>Powered by Turndown</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js" crossorigin charset="utf8" type="application/javascript"></script>
+    <script src="https://unpkg.com/turndown/dist/turndown.js" crossorigin  charset="utf8" type="application/javascript"></script>
+    <script>
+ 
+const input = document.getElementById('input');
+const panel = document.querySelector('.panel');
+
+input.addEventListener('input', () => {
+    const turndownService = new window.TurndownService();
+    const converter = new showdown.Converter(); // Initialize Showdown
+
+    if (panel.classList.contains('flipped')) {
+        // Markdown to HTML
+        const html = converter.makeHtml(input.value);
+        input.value = html;
+    } else {
+        // HTML to Markdown
+        input.value = turndownService.turndown(input.value);
+    }
+});
+
+panel.addEventListener('click', () => {
+    panel.classList.toggle('flipped');
+    input.value = ''; // Clear the textarea before flipping
+
+    // Optional: Add a small delay before focusing for smoother UX
+    setTimeout(() => {
+        input.focus();
+    }, 300); // Adjust delay as needed
+});
+
+function copyToClipboard() {
+    const text = input.value;
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            // Optional: Provide visual feedback (e.g., change icon briefly)
+            const copyIcon = document.querySelector('.copy-icon svg');
+            copyIcon.classList.add('copied'); // Add a class for styling (e.g., change color)
+            setTimeout(() => {
+                copyIcon.classList.remove('copied');
+            }, 1500); // Remove the class after a delay
+        })
+        .catch(err => {
+            console.error('Failed to copy: ', err);
+            // Optional: Show an error message to the user
+        });
+}
+</script></body></html>
