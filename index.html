@@ -1,231 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>HTML to Markdown</title>
-<meta name="viewport" content="width=device-width">
-<style>
-  * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0 auto;
-    font-family: courier, monospace, sans-serif;
-    line-height: 1.3125;
-    color: #333;
-  }
-  header {
-    padding: 0.5em;
-    background-color: #fff;
-    text-align: center;
-  }
-  footer {
-    font-size: 0.875em;
-    text-align: center;
-    color: #666;
-  }
-  h1,
-  label[for="input"],
-  label[for="output"] {
-    margin: 0;
-    font-size: 1em;
-    font-weight: 700;
-    letter-spacing: 0.0625em;
-    text-transform: uppercase;
-  }
-  label[for="input"],
-  label[for="output"] {
-    font-weight: 400;
-  }
-  .source-link {
-    font-size: 0.875em;
-  }
-  .row:before,
-  .row:after {
-    content: " ";
-    display: table;
-  }
-  .row:after {
-    clear: both;
-  }
-  .row {
-    *zoom: 1;
-  }
-  .col,
-  .form-group {
-    padding: 0 0.5em;
-  }
-  @media (min-width: 36em) {
-    .col {
-      float: left;
-      width: 50%;
-    }
-  }
-  textarea {
-    width: 100%;
-    height: 36em;
-    margin: 0;
-    padding: 0.5em;
-    overflow: auto;
-    border: 1px solid;
-    background-color: #fff;
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    color: inherit;
-  }
-  #input {
-    background-color: #333;
-    color: #fff;
-    border: none;
-  }
-  select {
-    display: block;
-    width: 100%;
-    font-size: inherit;
-  }
-  .form-group {
-    display: inline-block;
-  }
-  .form-group label {
-    font-size: 0.875em;
-  }
-</style>
-<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to Markdown Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1e1e1e; /* Dark background */
+            --panel-bg: rgba(30, 30, 30, 0.8); /* Glassmorphic panel background */
+            --text-color: #eee; /* Light text */
+            --accent-color: #66fcf1; /* Teal accent */
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --glass-blur: 10px; /* Adjust blur amount */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        header {
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5); /* Glowing text shadow */
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .panel {
+            background-color: var(--panel-bg);
+            backdrop-filter: blur(var(--glass-blur)); /* Glassmorphism */
+            border-radius: 15px;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            overflow: hidden;
+            width: 800px;
+            max-width: 95%;
+            padding: 2rem;
+            position: relative;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            border: none;
+            resize: vertical;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            padding: 1rem;
+            box-sizing: border-box;
+            overflow: auto;
+            background: transparent; /* Transparent textarea */
+            color: var(--text-color);
+            outline: none; /* Remove focus outline */
+        }
+
+        /* Styles for the "Convert" button */
+        .convert-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s, background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .convert-button:hover {
+            transform: scale(1.05);
+            background-color: #52b788; /* A different hover color */
+        }
+
+        footer {
+            padding: 1.5rem 0;
+            text-align: center;
+            color: #999;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+
+            .panel {
+                padding: 1rem;
+            }
+
+            textarea {
+                height: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
-<header>
-<!--  <h1>turndown</h1>
-  <a class="source-link" href="https://github.com/mixmark-io/turndown">Source on GitHub</a> -->
-</header>
-<div class="row">
-  <div class="col">
-    <label for="input">HTML</label>
-    <textarea cols="100" rows=10 id="input"><h1>Paste html here. DOM nodes will work too!</h1>
-<!-- <p>This demonstrates <a href="https://github.com/mixmark-io/turndown">turndown</a> – an HTML to Markdown converter in JavaScript.</p> -->
-<h2>Usage</h2>
-<pre><code class="language-js">var turndownService = new TurndownService()
-console.log(
-  turndownService.turndown('&amp;lt;h1&amp;gt;Hello world&amp;lt;/h1&amp;gt;')
-)</code></pre>
-<hr />
-<p>It aims to be <a href="http://commonmark.org/">CommonMark</a>
- compliant, and includes options to style the output. These options include:</p>
-<ul>
-  <li>headingStyle (setext or atx)</li>
-  <li>horizontalRule (*, -, or _)</li>
-  <li>bullet (*, -, or +)</li>
-  <li>codeBlockStyle (indented or fenced)</li>
-  <li>fence (` or ~)</li>
-  <li>emDelimiter (_ or *)</li>
-  <li>strongDelimiter (** or __)</li>
-  <li>linkStyle (inlined or referenced)</li>
-  <li>linkReferenceStyle (full, collapsed, or shortcut)</li>
-</ul></textarea>
-  </div>
-  <div class="col">
-    <label for="output">Markdown</label>
-    <textarea readonly cols="100" rows=10 id="output"></textarea>
-  </div>
-</div>
-<div class="row">
-  <form method="get" action="/turndown" id="options">
-    <div class="form-group">
-      <label for="headingStyle">Heading style</label>
-      <select name="headingStyle" id="headingStyle">
-        <option value="setext">setext</option>
-        <option value="atx">atx</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="hr">Horizontal rule</label>
-      <select name="hr" id="hr">
-        <option value="* * *">* * *</option>
-        <option value="- - -">- - -</option>
-        <option value="_ _ _">_ _ _</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="bulletListMarker">Bullet</label>
-      <select name="bulletListMarker" id="bulletListMarker">
-        <option value="*">*</option>
-        <option value="-">-</option>
-        <option value="+">+</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="codeBlockStyle">Code block style</label>
-      <select name="codeBlockStyle" id="codeBlockStyle">
-        <option value="indented">indented</option>
-        <option value="fenced">fenced</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="fence">Fence</label>
-      <select name="fence" id="fence">
-        <option value="```">```</option>
-        <option value="~~~">~~~</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="emDelimiter">Em delimiter</label>
-      <select name="emDelimiter" id="emDelimiter">
-        <option value="_">_</option>
-        <option value="*">*</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="strongDelimiter">Strong delimiter</label>
-      <select name="strongDelimiter" id="strongDelimiter">
-        <option value="**">**</option>
-        <option value="__">__</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="linkStyle">Link style</label>
-      <select name="linkStyle" id="linkStyle">
-        <option value="inlined">inlined</option>
-        <option value="referenced">referenced</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="linkReferenceStyle">Link reference style</label>
-      <select name="linkReferenceStyle" id="linkReferenceStyle">
-        <option value="full">full</option>
-        <option value="collapsed">collapsed</option>
-        <option value="shortcut">shortcut</option>
-      </select>
-    </div>
-  </form>
-</div>
-<footer><p>This project relies on Turndown which is copyright © 2017 <a href="http://www.domchristie.co.uk/">Dom Christie</a> and is released under the MIT license</p></footer>
-<script>
-  ;(function () {
-    var input = document.getElementById('input')
-    var output = document.getElementById('output')
-    var optionsForm = document.getElementById('options')
-    var turndownService = new window.TurndownService(options())
-    input.addEventListener('input', update)
-    optionsForm.addEventListener('change', function () {
-      turndownService = new window.TurndownService(options())
-      update()
-    })
-    update()
-    function update () {
-      output.value = turndownService.turndown(input.value)
-    }
-    function options () {
-      var opts = {}
-      var inputs = optionsForm.getElementsByTagName('select')
-      for (var i = 0; i < inputs.length; i++) {
-        var input = inputs[i]
-        opts[input.name] = input.value
-      }
-      return opts
-    }
-  })()
-</script>
+    <header>
+        <h1>HTML to Markdown Converter</h1>
+    </header>
+
+    <main>
+        <div class="panel">
+            <textarea id="input" placeholder="Paste HTML here..."></textarea>
+            <button class="convert-button" onclick="convert()">Convert</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>Powered by Turndown</p>
+    </footer>
+
+    <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    <script>
+        const input = document.getElementById('input');
+
+        function convert() {
+            const turndownService = new window.TurndownService();
+            input.value = turndownService.turndown(input.value);
+        }
+    </script>
 </body>
 </html>
