@@ -6,13 +6,17 @@
     <title>HTML to Markdown Converter</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        html,body,*:**{
+            box-sizing:border-box;
+            clear:"";
+        }
         :root {
             --bg-color: #010101; /* Dark background */
             --panel-bg: rgba(0, 0, 0, 0.3); /* glassmorphic panel */
             --text-color: #ffe; /* Light text */
             --h1-color : rgba(102, 252, 241, 0.5); 
             --accent-color: rgb(102,252,241); /* Teal accent */
-            --shadow-color: rgba(0, 0, 0, 0.2); /* clear maskf
+            --shadow-color: rgba(0, 0, 0, 0.2); /* clear maskf*/
             --bg-shadow-color: 0 4px 8px rgba(0, 0, 0, 0.2);
             --glass-blur: 10px; /* Adjust blur amount */
             --button-background-color: rgb(82,183,136); /* A different hover color */
@@ -70,8 +74,8 @@ transition-duration: 1.5s;
 }
         
 .panel {
-  position: absolute;
-  z-index: 10;
+display:flex;
+    z-index: 10;
   backdrop-filter: blur(4px);
   overflow: auto;
   max-width: 75%;  /*background: rgba(255, 255, 255, 0.5);*/
