@@ -7,12 +7,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1e1e1e; /* Dark background */
-            --panel-bg: rgba(0, 0, 0, 0.3); /* Glassmorphic panel background */
-            --text-color: #eee; /* Light text */
-            --accent-color: #66fcf1; /* Teal accent */
-            --shadow-color: rgba(0, 0, 0, 0.2);
+            --bg-color: #010101; /* Dark background */
+            --panel-bg: rgba(0, 0, 0, 0.3); /* glassmorphic panel */
+            --text-color: #ffe; /* Light text */
+            --h1-color : rgba(102, 252, 241, 0.5); 
+            --accent-color: rgb(102,252,241); /* Teal accent */
+            --shadow-color: rgba(0, 0, 0, 0.2); /* clear maskf
+            --bg-shadow-color: 0 4px 8px rgba(0, 0, 0, 0.2);
             --glass-blur: 10px; /* Adjust blur amount */
+            --button-background-color: rgb(82,183,136); /* A different hover color */
         }
 
         body {
@@ -21,7 +24,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             min-height: 100vh;
             overflow: hidden; /* Prevent scrollbars */
         }
@@ -36,7 +39,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5); /* Glowing text shadow */
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5); 
         }
 
         main {
@@ -105,12 +108,12 @@
             cursor: pointer;
             font-weight: 500;
             transition: transform 0.2s, background-color 0.3s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow:
         }
 
         .convert-button:hover {
             transform: scale(1.05);
-            background-color: #52b788; /* A different hover color */
+            var(--button-background-color);
         }
 
         footer {
@@ -157,7 +160,7 @@
 
         function convert() {
           //  const turndownService = new window.TurndownService();
-            var turndownService = new TurndownService({ headingStyle: 'setext',hr: '---',bullet: '*', codeBlockStyle: 'indented', fence: '```', emDelimiter: '_', strongDelimiter: '**', linkStyle: 'inlined', linkReferenceStyle: 'shortcut'; });
+            var turndownService = new TurndownService({ headingStyle: 'setext',hr: '---',bullet: '*', codeBlockStyle: 'indented', fence: '```', emDelimiter: '_', strongDelimiter: '**', linkStyle: 'inlined', linkReferenceStyle: 'shortcut' })
             input.value = turndownService.turndown(input.value);
         }
     </script>
