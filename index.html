@@ -138,7 +138,8 @@
         const input = document.getElementById('input');
 
         function convert() {
-            const turndownService = new window.TurndownService();
+          //  const turndownService = new window.TurndownService();
+            var turndownService = new TurndownService({ headingStyle: 'setext',hr: '---',bullet: '*', codeBlockStyle: 'indented', fence: '```', emDelimiter: '_', strongDelimiter: '**', linkStyle: 'inlined', linkReferenceStyle: 'shortcut'; });
             input.value = turndownService.turndown(input.value);
         }
     </script>
