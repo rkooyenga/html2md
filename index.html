@@ -74,10 +74,9 @@ transition-duration: 1.5s;
   z-index: 10;
   backdrop-filter: blur(4px);
   overflow: auto;
-    width:70vw;
-  /*background: rgba(255, 255, 255, 0.5);*/
-  background: rgba(0,0,0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 75%;  /*background: rgba(255, 255, 255, 0.5);*/
+  background: rgba(128,128,128, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   padding: 2rem;
   border-radius: 20px;
   text-align: center;
@@ -87,7 +86,7 @@ transition-duration: 1.5s;
 
 
         textarea {
-            width: 100%;
+            width: 70%;
             height: 100px;
             border: none;
             resize: vertical;
@@ -114,7 +113,6 @@ transition-duration: 1.5s;
             cursor: pointer;
             font-weight: 500;
             transition: transform 0.2s, background-color 0.3s;
-            box-shadow:
         }
 
         .convert-button:hover {
