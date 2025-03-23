@@ -81,7 +81,6 @@
 
     .panel {
       display: flex;
-      flex-item: 1;
       z-index: 10;
       backdrop-filter: blur(4px);
       overflow: auto;
@@ -130,7 +129,11 @@
 
     .convert-button:hover {
       color: var(--accent-color);
-      background: linear-gradient(whitesmoke, var(--black-trans), var(--black-trans), whitesmoke, var(--black-trans), whitesmokevar(--black-trans); )
+      background: linear-gradient(whitesmoke,
+          var(--black-trans),
+          var(--black-trans),
+          whitesmoke, var(--black-trans),
+          whitesmokevar(--black-trans));
     }
 
     .convert-button:active {
@@ -163,6 +166,7 @@
       }
 
       textarea {
+        margin-top: 30px;
         min-height: 300px;
       }
 
@@ -189,7 +193,15 @@
 
   <main>
     <div class="panel">
-      <textarea id="input" placeholder="&#10&#10&#10;.html ➥ .md &#10-----------&#10&#10## Conversion&#10&#10Paste source doc or a DOM fragment here.&#10&#10[project](//rkooyenga.github.io/html2md)"></textarea>
+      <textarea id="html2mdInput" placeholder="
+                                               
+Easy Conversion
+                                               
++ Paste your HTML here
+
++ Hit 'convert'
+
+...it will transform to Markdown for you"></textarea>
       <button class="convert-button" onclick="convert()">Convert</button>
     </div>
   </main>
@@ -200,7 +212,7 @@
 
   <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
   <script>
-    const input = document.getElementById('input');
+    const html2mdInput = document.getElementById('html2mdInput');
 
     function convert() {
       var turndownService = new TurndownService({
@@ -214,7 +226,7 @@
         linkStyle: 'inlined',
         linkReferenceStyle: 'shortcut'
       })
-      input.value = turndownService.turndown(input.value);
+      html2mdInput.value = turndownService.turndown(html2mdInput.value ? html2mdInput.value : html2mdInput.placeholder);
     }
   </script>
 </body>
