@@ -203,7 +203,17 @@ flipButton.addEventListener('click', () => {
 });
 
 input.addEventListener('input', () => {
-    const turndownService = new window.TurndownService();
+    const turndownService = new TurndownService({
+        headingStyle: 'setext',
+        hr: '---',
+        bullet: '-',
+        codeBlockStyle: 'fenced',
+        fence: '```',
+        emDelimiter: '*',
+        strongDelimiter: '**',
+        linkStyle: 'inlined',
+        linkReferenceStyle: 'shortcut'
+      })
     const converter = new showdown.Converter();
 
     if (panel.classList.contains('flipped')) {
