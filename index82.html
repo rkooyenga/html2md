@@ -140,6 +140,7 @@ const panel = document.querySelector('.panel');
 
 input.addEventListener('input', () => {
     const turndownService = new window.TurndownService();
+    
     const converter = new showdown.Converter(); // Initialize Showdown
 
     if (panel.classList.contains('flipped')) {
@@ -147,8 +148,20 @@ input.addEventListener('input', () => {
         const html = converter.makeHtml(input.value);
         input.value = html;
     } else {
+        var turndownService = new TurndownService({
+        headingStyle: 'setext',
+        hr: '---',
+        bullet: '-',
+        codeBlockStyle: 'fenced',
+        fence: '```',
+        emDelimiter: '*',
+        strongDelimiter: '**',
+        linkStyle: 'inlined',
+        linkReferenceStyle: 'shortcut'
+      })
+      input.value = turndownService.turndown(input.value ? input.value : input.placeholder);
         // HTML to Markdown
-        input.value = turndownService.turndown(input.value);
+      //  input.value = turndownService.turndown(input.value);
     }
 });
 
