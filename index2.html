@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML to Markdown Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+      -webkit-font-smoothing: antialiased;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+      /* Changed to pre-wrap */
+      text-rendering: optimizeLegibility;
+    }
+
+    :root {
+      --black-trans: rgba(0, 0, 0, 0.0);
+      --white-trans: rgba(255, 255, 255, 0.2);
+      --bg-color: #111111;
+      /* Dark background */
+      --panel-bg: rgba(0, 0, 0, 0.3);
+      /* glassmorphic panel */
+      --text-color: #ffe;
+      /* Light text */
+      --h1-color: rgba(112, 255, 246, 1);
+      --accent-color: rgb(122, 255, 241);
+      /* Teal accent */
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      /* clear maskf*/
+      --bg-shadow-color: 0 4px 8px rgba(0, 0, 0, 0.2);
+      --glass-blur: 10px;
+      /* Adjust blur amount */
+      --button-background-color: rgb(82, 183, 136);
+      /* A different hover color */
+      --button-background-color-2: rgba(0, 0, 0, 0.3);
+    }
+
+    html,
+    body {
+      background: var(--bg-color);
+      box-sizing: border-box;
+      margin: 0;
+      color: var(--accent-color);
+      min-height: 100vh;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 250px;
+    }
+
+    header {
+      max-height: 50px;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+      z-index: 11;
+    }
+
+    main {
+      flex-grow: 1;
+      /* Allows main to take up remaining space */
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .panel {
+      display: flex;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+      overflow: auto;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      padding: 2rem;
+      border-radius: 20px;corner-shape:curve;
+      border-radius:66% / 30px;
+      text-align: center;
+      box-shadow: 0px 4px 20px var(--accent-color);
+      transition: all 0.3s ease-in-out;
+      width: 80vw;
+      max-width: 95%;
+      height: 80vh;
+      /* Set the height of the panel */
+    }
+
+    textarea {
+      width: 100%;
+      height: 94%;
+      margin-top:6%;border: none;
+      resize: vertical;
+      font-family: 'Noe','Noe Display','National','Roboto Mono','Fira Mono','Fira Sans', system-ui,monospace;
+      font-size: 1.1rem;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      overflow: auto;
+      background: transparent;
+      color: var(--text-color);
+      outline: none;
+    }
+
+    .convert-button {
+      position: absolute;
+      top: 20px;
+     /* right: 25px; */ width:80vw;
+      color: var(--accent-color);
+      background-color: var(--black-trans);
+     backdrop-filter:blur(var(--glass-blur)); border-color: var(--accent-color);
+      border-style: solid 1px;
+      padding: 0.8rem 1.5rem;
+      border-radius: 38px;font-size:110%;
+      corner-shape: curve;
+border-radius: 66% / 30px; cursor: pointer;
+      font-weight: 500;
+      transition: transform 0.2s, background-color 0.3s;
+ text-shadow: 0 0 3px rgba(102, 252, 241, 0.5);
+    box-shadow: 0px 4px 20px var(--accent-color);   }
+
+    .convert-button:hover {
+      color: var(--accent-color);
+      background: linear-gradient(whitesmoke,
+          var(--black-trans),
+          var(--black-trans),
+          whitesmoke, var(--black-trans),
+          whitesmokevar(--black-trans));
+    }
+
+    .convert-button:active {
+      transform: scale(.94);
+      color: var(--accent-color);
+      background-color: var(--white-trans);
+    }
+
+    footer {
+      display: grid;
+      height: 50px;
+      padding: 0;
+      text-align: center;
+      color: #999;
+    }
+a{color:var(--accent-color);}
+    @media (max-width: 768px) {
+      header {
+        top: 0;
+        display: grid;
+      }
+
+      main {
+        padding: 1rem;
+        height: 100%;
+      }
+
+      .panel {
+        padding: 1rem;
+      }
+
+      textarea {
+        margin-top: 30px;
+        min-height: 300px;
+      }
+
+      footer {
+        bottom: 0;
+        display: grid;
+      }
+    }
+
+    @media (max-width: 469px) {
+
+      header,
+      h1 {
+        display: none;
+      }
+    }
+ ::-webkit-scrollbar {
+  width: 2px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color:var(--accent-color);
+  text-shadow: 0 0 3px rgba(102, 252, 241, 0.5);
+    box-shadow: 0px 4px 20px var(--accent-color);
+      transition: all 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* rgba(0, 0, 0, 0.05) */
+} </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMNEL9EL9Z"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-FMNEL9EL9Z');
+  </script>
+
+</head>
+
+<body>
+  <header>
+    <h1>.html ➥ .md</h1>
+  </header>
+
+  <main>
+    <div class="panel">
+      <textarea id="html2mdInput" placeholder="
+                                               
+Easy Conversion
+                                               
++ Paste your HTML here
+
++ Hit 'convert'
+
+...it will transform to Markdown for you"></textarea>
+      <button class="convert-button" onclick="convert()">Convert</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>Powered by Turndown</p>
+  </footer>
+
+  <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+  <script>
+    const html2mdInput = document.getElementById('html2mdInput');
+
+    function convert() {
+      var turndownService = new TurndownService({
+        headingStyle: 'setext',
+        hr: '---',
+        bullet: '-',
+        codeBlockStyle: 'fenced',
+        fence: '```',
+        emDelimiter: '*',
+        strongDelimiter: '**',
+        linkStyle: 'inlined',
+        linkReferenceStyle: 'shortcut'
+      })
+      html2mdInput.value = turndownService.turndown(html2mdInput.value ? html2mdInput.value : html2mdInput.placeholder);
+    }
+  </script>
+</body>
+
+</html>
